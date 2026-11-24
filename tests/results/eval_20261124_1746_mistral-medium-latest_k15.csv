@@ -1,0 +1,61 @@
+﻿id;question;mode;intent;response_type;intent_ok;response_ok;proj_missing;proj_extra;proj_score;kw_missing;kw_score;score;passed;tot_in;tot_out;total_s;model;top_k;answer;reference;note_manuelle
+Q01;A-t-il fait du RAG ?;recrut;question;rag;True;True;[10, 13];[];0.33;[];1.0;0.67;False;6007;436;4.183;mistral-medium-latest;15;"Oui, Jacob Bessire a conçu et déployé un **système RAG** dans le cadre du **projet P9** (validé le 03/09/2026).
+
+### Réalisation clé (P9) :
+- **Chatbot RAG** pour répondre aux questions sur les événements culturels de Nantes Métropole, basé sur les données **OpenAgenda**.
+- **Stack technique** :
+  - **Modèles** : Mistral (`mistral-small-latest` pour la génération, `mistral-embed` pour les embeddings).
+  - **Recherche vectorielle** : FAISS (indexation des événements avec métadonnées).
+  - **API** : FastAPI (endpoints `/ask`, `/health`, etc.), conteneurisée avec **Docker**.
+  - **Évaluation** : Métriques **Ragas** (faithfulness : 0,75–1,00 ; answer_relevancy : 0,70–0,87).
+  - **Optimisations** : Pré-filtrage structuré (dates, zone, gratuité) pour réduire les tokens et les coûts, pipeline en **2 appels LLM** (extraction d'intention + génération).
+
+### Points forts soulignés par l'évaluateur :
+- Chaîne RAG **modulaire et complète** (collecte, indexation, requêtage).
+- Intégration robuste de **OpenAgenda** (pagination, gestion d'erreurs, rate limiting).
+- **Tests automatisés** : Jeu de questions annoté, tests fonctionnels (Pytest), évaluation Ragas.
+- **Documentation** détaillée (README, rapport technique, Swagger).
+
+### Livrables :
+Dépôt GitHub avec code, API déployable, rapport technique, et présentation.
+
+---
+*Source : P9 (fiche projet, retour évaluateur, présentation).*";Oui : P9 (chatbot RAG sur les événements culturels de Nantes : OpenAgenda, FAISS, Mistral, FastAPI, Docker, évaluation Ragas), P10 (audit et optimisation d'un RAG : RapidOCR, Pydantic AI, outil NL→SQL, Ragas) et P13 (AskJack, assistant RAG sur son parcours : Streamlit, Mistral, FAISS).;
+Q02;A-t-il utilisé FastAPI ?;recrut;question;rag;True;True;[];[];1.0;[];1.0;1.0;True;6231;216;3.581;mistral-medium-latest;15;"Oui, Jacob Bessire a utilisé **FastAPI** dans plusieurs projets, notamment :
+- **P5** : API exposant un pipeline ML (régression logistique) avec validation Pydantic, documentation Swagger, et base PostgreSQL.
+- **P8** : API de scoring conteneurisée (Docker) avec CI/CD (GitHub Actions → Hugging Face Spaces) et logging des prédictions.
+- **P9** : Système RAG avec endpoints `/ask`, `/ask_debug`, `/health`, etc., validation stricte des entrées et tests automatisés.
+- **P12** : API pour un système de recommandation agricole, avec routes `/predict`, `/recommend`, et suivi MLflow.
+
+FastAPI est donc une technologie centrale dans sa stack technique pour le déploiement de modèles ML et de systèmes RAG.";Oui : P5 (API de prédiction FastAPI + PostgreSQL, déployée sur Hugging Face Spaces), P8 (API de scoring dockerisée), P9 (API du système RAG) et P12 (API du moteur de recommandation agricole).;
+Q03;A-t-il des compétences MLOps ?;recrut;question;rag;True;True;[12];[];0.75;[];1.0;0.88;True;6096;375;4.034;mistral-medium-latest;15;"Oui, Jacob Bessire a validé des compétences solides en **MLOps**, démontrées par plusieurs projets :
+
+- **P6 (MLOps partie 1/2)** :
+  Tracking d'expériences avec **MLflow** (paramètres, métriques, model registry), optimisation d'hyperparamètres (GridSearch), gestion de l'overfitting/underfitting, et traduction d'enjeux métiers en métriques (coût FN/FP, seuil optimal).
+  *Stack* : Python, scikit-learn, MLflow, Pandas, LightGBM.
+
+- **P8 (MLOps partie 2/2)** :
+  Déploiement d'une **API FastAPI dockerisée** (chargement unique du modèle), pipeline **CI/CD GitHub Actions** vers Hugging Face Spaces, **monitoring** (latence, taux d'erreur, data drift avec Evidently), et **optimisation des performances** (profilage cProfile, réduction de la latence de 623 ms à 246 ms).
+  *Stack* : FastAPI, Docker, PostgreSQL (Neon), Pytest, Evidently, cProfile.
+
+- **P5** :
+  API REST documentée (Swagger), tests automatisés (Pytest, 33 tests), CI/CD, gestion des secrets et traçabilité des inputs/outputs en base de données.
+
+*Retours évaluateurs* : Compétences validées sans axe d'amélioration majeur (ex. : ""analyse du data drift, stratégie de stockage expliquée, optimisation des performances"" pour P8).";Oui : CI/CD et tests automatisés (P5, P8, P12), suivi d'expériences MLflow (P6, P12), API dockerisée, monitoring du data drift avec Evidently et profilage (P8).;
+Q04;Quel est son niveau d'anglais ?;recrut;question;rag;True;True;;;;['royaume-uni'];0.5;0.5;False;4201;46;3.87;mistral-medium-latest;15;Jacob Bessire a un niveau d'anglais **courant**, comme indiqué dans son CV.;Courant (CV), renforcé par 3 ans de travail au Royaume-Uni (Video Networks, Exor, 2001-2004) et le management d'une équipe de 8 personnes au Royaume-Uni chez Oracle/Cerner.;
+Q05;Son expérience professionnelle en bref ?;recrut;question;rag;True;True;;;;[];1.0;1.0;True;5278;447;4.271;mistral-medium-latest;15;"Jacob Bessire dispose d'une expérience professionnelle riche et variée dans le domaine de l'informatique et de la gestion de projets, avec plus de 20 ans d'expérience chez **Oracle (&Cerner)** en tant que **Senior Architecte Interfaces**, où il a travaillé sur :
+- L'étude et la mise en place d’interfaces entre **Millennium** (DPI Oracle/Cerner) et les systèmes hospitaliers tiers.
+- La reprise de données, le consulting, les réponses aux appels d’offres et le chiffrage.
+- La gestion d’une équipe de **8 personnes** (UK).
+- **Environnement technique** : Aix/Citrix/Oracle (architecture 3 tiers), moteur d’interfaces **OpenEngine (EAI Oracle/Cerner)**, **HL7**, langages **CCL/SQL**.
+
+Auparavant, il a occupé des postes d’**Analyste Programmeur** chez **Exor Management Services (UK)** et **Video Networks Ltd (UK)**, ainsi que des rôles en **développement, intégration et maintenance** chez **CEGEDIM**, **CISI Engineering** et **SYSECA S.A.**.
+**Stack technique historique** : Delphi, C/C++, SQL, Excel VBA, XML, XLST, Informix, dBase IV, Turbo Pascal, MapBasic, etc.
+
+Pour ses projets récents en **Data Science** (ex. **P4**, **P11**, **P13**), il a travaillé sur :
+- La classification automatique de données RH (**P4**) avec analyse exploratoire et fusion de jeux de données.
+- Le cadrage d’un projet IA (**P11**) : architecture cible, planning, budget, ROI, conformité RGPD.
+- La création d’un portfolio technique (**P13**) incluant un projet personnel (ex. **AskJack**).
+
+**Compétences clés** : gestion d’équipe, analyse métier, architecture technique, méthodologies **CRISP-DM**, et outils **MLOps/Azure**.";~35 ans d'informatique. Depuis 2005 (20 ans) Senior Architecte Interfaces chez Oracle/Cerner : interfaces HL7 entre le DPI Millennium et les systèmes hospitaliers, consulting, appels d'offres, management d'une équipe de 8 personnes (UK). Avant : analyste-programmeur au Royaume-Uni (2001-2004), responsable intégration et maintenance chez CEGEDIM (6,5 ans, 8 personnes), ingénieur chez CISI et SYSECA (Défense).;
+Q06;Quelle météo demain ?;recrut;hors_sujet;fixed;True;True;;;;;;;True;938;29;0.522;;15;Je ne peux répondre qu'aux questions sur le parcours et les compétences de Jacob Bessire.;Réponse toute faite hors_sujet (refus poli, sans appel de génération).;

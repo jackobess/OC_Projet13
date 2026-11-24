@@ -34,7 +34,8 @@ candidate:
 ui:
   recrut:
     title: "AskJack"
-    subtitle: "Ma formation OpenClassrooms **Data Scientist – Machine Learning** (13 projets) et mon parcours (professionnel et formation)"
+    subtitle: "Des questions sur ma formation OpenClassrooms **Data Scientist – Machine Learning** (13 projets)<br>
+     ou sur mon parcours (professionnel et formation)?"
     description: "Posez vos questions sur les projets, la stack et les compétences de {first_name}."
     examples:
       - "Quels projets impliquent du déploiement d'API ?"

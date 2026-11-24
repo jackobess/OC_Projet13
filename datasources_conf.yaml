@@ -1,7 +1,7 @@
 # datasource_conf.yaml — AskJack : description du corpus
 # Chargé par rag.load_config via config.yaml -> paths.datasources_file
 # description : lue par le routeur (get_intent) pour choisir les doc_types -> soigner le contenu
-# forcecontext : true/false(default)/if_filter 
+# forcecontext : true/false(default)/if_filter/if_filter_or_not_sure 
 #  - si true, le doc_type est toujours inclus dans le contexte, même si pas retenu par le routeur
 #  - si if_filter, le doc_type est inclus dans le contexte uniquement si retenu par le routeur
 

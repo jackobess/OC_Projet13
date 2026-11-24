@@ -8,6 +8,9 @@ Il s'appuie **uniquement** sur mes documents (CV, fiches projets, présentations
 
 Askjack est aussi le Projet personnel technique réalisé dans le cadre du **Projet 13** de la formation OpenClassrooms.
 
+🔗 **Application en ligne** : https://askjack.streamlit.app/
+📦 **Dépôt** : https://github.com/jackobess/OC_Projet13
+
 ---
 
 ## Deux modes
@@ -79,9 +82,10 @@ PyMuPDF4LLM / MarkItDown (conversion des documents en Markdown) · pandas
 ## Installation
 
 ```bash
-git clone <url-du-depot>
-cd <depot>
-pip install -r requirements.txt
+git clone https://github.com/jackobess/OC_Projet13.git
+cd OC_Projet13
+pip install -r requirements.txt        # app
+pip install -r requirements-dev.txt    # + notebooks de préparation des données
 ```
 
 Créer un fichier `.env` à la racine (**jamais commité**) :

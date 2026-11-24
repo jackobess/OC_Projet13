@@ -12,7 +12,9 @@ from pathlib import Path
 
 import pandas as pd
 import streamlit as st
+import streamlit.components.v1 as components
 from dotenv import load_dotenv
+import re
 
 ROOT = Path(__file__).resolve().parent
 sys.path.insert(0, str(ROOT))
@@ -44,6 +46,15 @@ def load_llm(model: str):
 
 
 CFG, VS = load_resources()
+
+
+@st.cache_resource
+def corpus_stats():
+    metas = [VS.docstore.search(i).metadata for i in VS.index_to_docstore_id.values()]
+    return len({m["source_path"] for m in metas}), len(metas)
+
+
+N_FILES, N_CHUNKS = corpus_stats()
 DEBUG_ALLOWED = CFG["app"]["debug"]                # décidé côté serveur uniquement
 MAX_Q = CFG["app"].get("max_questions_per_session", 20)
 DEFAULT_MODEL = CFG["models"]["llm"]
@@ -54,6 +65,8 @@ ss.setdefault("history", [])                       # [{"question", "res"}]
 ss.setdefault("log", [])                           # 1 ligne de métriques par question
 ss.setdefault("n_questions", 0)
 ss.setdefault("pending", None)                     # question exemple cliquée
+ss.setdefault("draft", None)                       # exemple « ... » à compléter avant envoi
+ss.setdefault("scroll", False)                     # repositionner la vue sur la dernière réponse
 ss.setdefault("debug_on", DEBUG_ALLOWED)
 ss.setdefault("mode", CFG["app"]["mode"])
 ss.setdefault("top_k", CFG["retrieval"]["top_k"])
@@ -85,20 +98,27 @@ with st.sidebar:
             st.download_button("⬇️ Télécharger CSV", df_log.to_csv(index=False, sep=";").encode("utf-8-sig"),
                                file_name=f"askjack_log_{datetime.now():%Y%m%d_%H%M}.csv", mime="text/csv")
 
-    st.caption(
-        f"Modèle : {ss.model if DEBUG_ALLOWED else DEFAULT_MODEL}  \n"
-        f"top_k : {ss.top_k if DEBUG_ALLOWED else CFG['retrieval']['top_k']}  \n"
-        f"max_tokens : {CFG['models']['max_tokens']}"
-    )
-
 DEBUG = DEBUG_ALLOWED and ss.debug_on
 MODE = ss.mode if DEBUG_ALLOWED else CFG["app"]["mode"]
 
+with st.sidebar:                                   # après le panneau debug -> valeurs à jour
+    st.caption(
+        f"Modèle : {ss.model if DEBUG_ALLOWED else DEFAULT_MODEL}  \n"
+        f"top_k : {ss.top_k if DEBUG_ALLOWED else CFG['retrieval']['top_k']}  \n"
+        f"max_tokens : {CFG['models']['max_tokens']}  \n"
+        f"Corpus : {N_FILES} fichiers · {N_CHUNKS} chunks"
+    )
+
 # ------------------------------------------------------------------ en-tête
 ui = rag.ui_texts(CFG, MODE)
-st.title(ui.get("title", "AskJack"))
+# st.title(ui.get("title", "AskJack"))
+st.markdown(f"<h1 style='text-align: center'>{ui.get('title', 'AskJack')}</h1>", unsafe_allow_html=True)
+#if ui.get("subtitle"):
+#    st.caption(ui["subtitle"])
 if ui.get("subtitle"):
-    st.caption(ui["subtitle"])
+    sub = re.sub(r"\*\*(.+?)\*\*", r"<b>\1</b>", ui["subtitle"])
+    st.markdown(f"<p style='text-align: center; opacity: 0.7; font-size: 0.9rem'>{sub}</p>",
+                unsafe_allow_html=True)    
 if ui.get("description"):
     st.write(ui["description"])
 
@@ -106,7 +126,10 @@ if ui.get("examples") and not ss.history:
     cols = st.columns(len(ui["examples"]))
     for col, ex in zip(cols, ui["examples"]):
         if col.button(ex):
-            ss.pending = ex
+            if ex.rstrip().endswith(("...", "…")):  # exemple à compléter -> zone de saisie, pas d'envoi
+                ss.draft = ex
+            else:
+                ss.pending = ex
 
 
 # ------------------------------------------------------------------ affichage d'un échange
@@ -154,8 +177,38 @@ def show_exchange(question: str, res: dict):
 for item in ss.history:
     show_exchange(item["question"], item["res"])
 
+
+def scroll_to_last_exchange(nonce: int):
+    """Ramène la vue sur la dernière question/réponse (le nonce force la ré-exécution du script)."""
+    components.html(f"""<script>
+      // nonce {nonce}
+      setTimeout(() => {{
+        const msgs = window.parent.document.querySelectorAll('[data-testid="stChatMessage"]');
+        if (msgs.length >= 2) msgs[msgs.length - 2].scrollIntoView({{behavior: "auto", block: "start"}});
+      }}, 1200);   // après le rendu Streamlit (sinon écrasé)
+    </script>""", height=0)
+
+
+if ss.scroll:
+    scroll_to_last_exchange(ss.n_questions)
+    ss.scroll = False
+
 # ------------------------------------------------------------------ saisie
 limit_reached = ss.n_questions >= MAX_Q
+
+if ss.draft is not None and not limit_reached:     # exemple « ... » : à compléter puis envoyer
+    with st.form("draft_form"):
+        draft_text = st.text_area("Complétez la question :" if MODE == "recrut" else "Complète la question :",
+                                  value=ss.draft, height=200)
+        c_send, c_cancel = st.columns(2)
+        send = c_send.form_submit_button("Envoyer")
+        cancel = c_cancel.form_submit_button("Annuler")
+    if send and draft_text.strip():
+        ss.pending, ss.draft = draft_text.strip(), None
+    elif cancel:
+        ss.draft = None
+        st.rerun()
+
 typed = st.chat_input("Votre question…" if MODE == "recrut" else "Ta question ou une annonce…",
                       disabled=limit_reached)
 if limit_reached:
@@ -182,4 +235,5 @@ if question and not limit_reached:
     ss.log.append({"horodatage": datetime.now().strftime("%Y-%m-%d %H:%M:%S"), "mode": MODE,
                    "question": question, "response_type": res.get("response_type"),
                    "intent": (res.get("intent") or {}).get("intent"), **res["metrics"]})
+    ss.scroll = True
     st.rerun()

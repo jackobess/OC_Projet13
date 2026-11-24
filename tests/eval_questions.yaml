@@ -1,0 +1,80 @@
+# tests/eval_questions.yaml — AskJack : jeu d'évaluation / non-régression
+# Utilisé par src/evaluate.py (cellule « Évaluation » du notebook 02).
+#
+# Champs d'un test (tous facultatifs sauf id et question) :
+#   mode               recrut | candidat (défaut : recrut)
+#   expected_intent    intent attendu du routeur (question, annonce, hors_sujet, ...)
+#   expected_response  rag | fixed  (réponse RAG ou réponse toute faite)
+#   expected_projects  n° de projets qui doivent être cités dans la réponse (score = trouvés / attendus)
+#   expected_keywords  mots-clés attendus ; une liste = variantes acceptées (casse et accents ignorés)
+#   must_abstain       true si la réponse doit dire que l'info n'est pas dans le corpus
+#   reference          réponse attendue (vérité terrain, réutilisable pour une évaluation Ragas)
+
+settings:
+  pass_threshold: 0.8          # score minimal (0-1) pour qu'un test de contenu passe
+  abstain_markers:             # formulations reconnues comme une abstention
+    - "non trouve"
+    - "pas d'information"
+    - "aucune information"
+    - "ne figure pas"
+    - "pas mentionne"
+    - "ne mentionne pas"
+
+tests:
+  - id: Q01
+    question: "A-t-il fait du RAG ?"
+    expected_intent: question
+    expected_response: rag
+    expected_projects: [9, 10, 13]
+    expected_keywords: [["faiss"], ["mistral"], ["ragas"]]
+    reference: >-
+      Oui : P9 (chatbot RAG sur les événements culturels de Nantes : OpenAgenda, FAISS, Mistral, FastAPI,
+      Docker, évaluation Ragas), P10 (audit et optimisation d'un RAG : RapidOCR, Pydantic AI, outil NL→SQL,
+      Ragas) et P13 (AskJack, assistant RAG sur son parcours : Streamlit, Mistral, FAISS).
+
+  - id: Q02
+    question: "A-t-il utilisé FastAPI ?"
+    expected_intent: question
+    expected_response: rag
+    expected_projects: [5, 8, 9, 12]
+    expected_keywords: [["fastapi"], ["pydantic"]]
+    reference: >-
+      Oui : P5 (API de prédiction FastAPI + PostgreSQL, déployée sur Hugging Face Spaces), P8 (API de scoring
+      dockerisée), P9 (API du système RAG) et P12 (API du moteur de recommandation agricole).
+
+  - id: Q03
+    question: "A-t-il des compétences MLOps ?"
+    expected_intent: question
+    expected_response: rag
+    expected_projects: [5, 6, 8, 12]
+    expected_keywords: [["mlflow"], ["ci/cd", "github actions"], ["docker"], ["evidently", "drift"]]
+    reference: >-
+      Oui : CI/CD et tests automatisés (P5, P8, P12), suivi d'expériences MLflow (P6, P12), API dockerisée,
+      monitoring du data drift avec Evidently et profilage (P8).
+
+  - id: Q04
+    question: "Quel est son niveau d'anglais ?"
+    expected_intent: question
+    expected_response: rag
+    expected_keywords: [["courant", "fluent", "bilingue"], ["royaume-uni", "uk", "angleterre", "londres"]]
+    reference: >-
+      Courant (CV), renforcé par 3 ans de travail au Royaume-Uni (Video Networks, Exor, 2001-2004)
+      et le management d'une équipe de 8 personnes au Royaume-Uni chez Oracle/Cerner.
+
+  - id: Q05
+    question: "Son expérience professionnelle en bref ?"
+    expected_intent: question
+    expected_response: rag
+    expected_keywords: [["oracle", "cerner"], ["hl7"], ["interface"], ["equipe de 8", "8 personnes", "management"],
+                        ["royaume-uni", "uk"], ["cegedim"]]
+    reference: >-
+      ~35 ans d'informatique. Depuis 2005 (20 ans) Senior Architecte Interfaces chez Oracle/Cerner : interfaces HL7
+      entre le DPI Millennium et les systèmes hospitaliers, consulting, appels d'offres, management d'une équipe de
+      8 personnes (UK). Avant : analyste-programmeur au Royaume-Uni (2001-2004), responsable intégration et
+      maintenance chez CEGEDIM (6,5 ans, 8 personnes), ingénieur chez CISI et SYSECA (Défense).
+
+  - id: Q06
+    question: "Quelle météo demain ?"
+    expected_intent: hors_sujet
+    expected_response: fixed
+    reference: "Je ne peux répondre qu'aux questions sur le parcours et les compétences de Jacob Bessire."
