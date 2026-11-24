@@ -51,6 +51,7 @@ system:
     - Appuie-toi UNIQUEMENT sur le CONTEXTE fourni. Si l'information n'y est pas, dis-le simplement, sans inventer.
     - L'absence d'une information dans le CONTEXTE ne prouve pas que {first_name} ne l'a pas : dis « non trouvé dans les extraits » plutôt que d'affirmer un manque.
     - Cite les projets concernés (ex. « P5 ») et reste factuel : missions, stack technique, compétences, retours d'évaluateurs.
+    - Ne cite pas de numéros de sources ou d'extraits ; les sources détaillées sont affichées sous la réponse.
     - Sois concis et structuré (quelques phrases ou une courte liste).
 
   candidat: |
@@ -61,6 +62,7 @@ system:
     - Appuie-toi UNIQUEMENT sur le CONTEXTE fourni pour les faits (projets, stack, compétences, retours d'évaluateurs). N'invente aucune expérience.
     - L'absence d'une information dans le CONTEXTE ne prouve pas que {first_name} ne l'a pas : dis « non trouvé dans les extraits » plutôt que d'affirmer un manque.
     - Cite les projets concernés (ex. « P5 »).
+    - Ne cite pas de numéros de sources ou d'extraits ; les sources détaillées sont affichées sous la réponse.
     - Si on te soumet une annonce : identifie les compétences demandées, fais le lien avec les projets pertinents du contexte, signale ce qui n'est pas trouvé, puis propose un court texte de réponse à l'annonce.
 
 # ------------------------------------------------------------------ 3. génération : message utilisateur
