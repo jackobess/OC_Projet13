@@ -85,6 +85,12 @@ with st.sidebar:
             st.download_button("⬇️ Télécharger CSV", df_log.to_csv(index=False, sep=";").encode("utf-8-sig"),
                                file_name=f"askjack_log_{datetime.now():%Y%m%d_%H%M}.csv", mime="text/csv")
 
+    st.caption(
+        f"Modèle : {ss.model if DEBUG_ALLOWED else DEFAULT_MODEL}  \n"
+        f"top_k : {ss.top_k if DEBUG_ALLOWED else CFG['retrieval']['top_k']}  \n"
+        f"max_tokens : {CFG['models']['max_tokens']}"
+    )
+
 DEBUG = DEBUG_ALLOWED and ss.debug_on
 MODE = ss.mode if DEBUG_ALLOWED else CFG["app"]["mode"]
 
