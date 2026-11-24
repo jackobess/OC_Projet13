@@ -6,7 +6,7 @@ app:
   max_questions_per_session: 20
 
 retrieval:
-  top_k: 10
+  top_k: 15
 
 chunking:
   size: 800
@@ -14,8 +14,8 @@ chunking:
 
 models:
   embedding: "mistral-embed"
-  llm: "mistral-small-latest"
-  llm_alternatives: ["mistral-medium-latest", "mistral-large-latest"]
+  llm: "mistral-medium-latest"
+  llm_alternatives: ["mistral-small-latest","mistral-medium-latest", "mistral-large-latest"]
   temperature: 0.2
   max_tokens: 4000
 
