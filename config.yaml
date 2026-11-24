@@ -1,0 +1,47 @@
+# config.yaml — AskJack
+
+app:
+  mode: recrut            # recrut | candidat — surchargé par ASKJACK_MODE
+  debug: false            # surchargé par ASKJACK_DEBUG
+  max_questions_per_session: 20
+
+retrieval:
+  top_k: 10
+
+chunking:
+  size: 800
+  overlap: 100
+
+models:
+  embedding: "mistral-embed"
+  llm: "mistral-small-latest"
+  llm_alternatives: ["mistral-medium-latest", "mistral-large-latest"]
+  temperature: 0.2
+  max_tokens: 4000
+
+paths:
+  txt_dir: "data/_txt"                  # txt convertis (sauvegarde physique)
+  chunks_file: "data/_chunks/chunks.jsonl"
+  index_dir: "index/faiss"              # commité pour Streamlit Cloud
+  datasources_file: "datasources_conf.yaml"
+
+candidate:
+  first_name: "Jacob"
+  last_name: "Bessire"
+  nickname: "Jack"
+  title: "Data Scientist – Machine Learning"
+
+ui:
+  recrut:
+    title: "AskJack"
+    subtitle: "Ma formation OpenClassrooms **Data Scientist – Machine Learning** (13 projets) et mon parcours (professionnel et formation)"
+    description: "Posez vos questions sur les projets, la stack et les compétences de {first_name}."
+    examples:
+      - "Quels projets impliquent du déploiement d'API ?"
+      - "Quelle stack MLOps {first_name} maîtrise-t-il ?"
+  candidat:
+    title: "AskJack — espace perso"
+    subtitle: "Ton assistant candidature"
+    description: "Interroge ta formation ou colle une annonce pour préparer ta réponse."
+    examples:
+      - "Réponds à l'annonce suivante : ..."

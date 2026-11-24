@@ -1,0 +1,45 @@
+# fixed_responses.yaml — AskJack : réponses toutes faites par intent (ni retrieval ni génération)
+# Chargé par rag.load_config (config.yaml -> paths.fixed_responses_file, défaut : ce fichier).
+#
+# Ordre de décision après get_intent :
+#   1. une entrée existe pour l'intent          -> cette réponse (quel que soit l'intent)
+#   2. sinon, intent "question" ou "annonce"    -> pipeline RAG normal
+#   3. sinon (intent inconnu / sans traitement) -> "default", ou à défaut "Sorry? I beg your pardon?"
+#
+# Format d'une entrée : texte | liste de textes (tirée au hasard) | {recrut: ..., candidat: ...}
+# Placeholders (section candidate de config.yaml) : {first_name} {last_name} {nickname} {title}
+
+salutation:
+  recrut: "Bonjour ! Je suis AskJack, je présente le parcours de {first_name} {last_name} ({title}). Avez-vous une question sur son profil ?"
+  candidat:
+    - "Salut {nickname} ! On répond à une annonce ou tu veux réviser ton parcours ?"
+    - "Yo {nickname}, whazup buddy ? Une annonce à décortiquer ?"
+    - "yeah .... haaa !!!"
+
+hors_sujet:
+  recrut: "Je ne peux répondre qu'aux questions sur le parcours et les compétences de {first_name} {last_name}."
+  candidat: "Hors sujet, {nickname} 😉 Je ne parle que de ton parcours et de tes candidatures."
+
+about_askjack:
+  recrut: >-
+    Je suis AskJack, un assistant RAG : je réponds à vos questions sur le parcours de {first_name} {last_name}
+    (expérience pro, formation Data Scientist, projets, stack technique, retours d'évaluateurs) en m'appuyant
+    uniquement sur ses documents (CV, fiches et présentations de projets, README).
+  candidat: >-
+    C'est moi, AskJack ! Je fouille tes documents (CV, fiches, prezs, README) pour répondre sur ton parcours,
+    et je peux analyser une annonce : colle-la-moi et je te prépare une réponse.
+
+default: "Désolé, je n'ai pas bien compris. Pouvez-vous reformuler votre question sur le profil de {first_name} ?"
+
+
+# ------------------------------------------------------------------ incidents de génération
+# Pas des intents : utilisées quand le LLM renvoie une réponse vide ou coupée. Placeholder en plus : {finish_reason}
+reponse_vide_max_tokens:      # rien écrit : limite max_tokens atteinte (souvent un modèle « thinking » qui raisonne trop)
+  recrut: "⚠️ Je n'ai pas pu formuler de réponse : la limite de longueur a été atteinte pendant ma réflexion. Essayez une question plus ciblée."
+  candidat: "⚠️ Pas de réponse, {nickname} : le modèle a épuisé max_tokens en réfléchissant. Augmente max_tokens, baisse top_k ou change de modèle."
+reponse_vide:                 # rien écrit, autre raison
+  recrut: "⚠️ Je n'ai pas obtenu de réponse cette fois-ci. Merci de reformuler ou de réessayer."
+  candidat: "⚠️ Réponse vide du modèle (raison : {finish_reason}). Réessaie ou change de modèle."
+reponse_tronquee:             # ajouté à la fin d'une réponse coupée par max_tokens
+  recrut: "_⚠️ Réponse tronquée (limite de longueur atteinte)._"
+  candidat: "_⚠️ Réponse tronquée : max_tokens atteint._"

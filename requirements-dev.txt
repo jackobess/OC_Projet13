@@ -1,0 +1,7 @@
+# requirements-dev.txt — all requirements inc. notebooks de préparation
+-r requirements.txt
+langchain-text-splitters==1.1.2
+markitdown==0.1.9
+pymupdf==2.1
+pymupdf4llm==2.1
+openpyxl==3.1.5

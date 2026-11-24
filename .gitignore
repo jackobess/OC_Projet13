@@ -1,0 +1,28 @@
+# ---------------------------------------------------------------- secrets (ne JAMAIS commiter)
+.env
+
+# ---------------------------------------------------------------- données non utilisées
+data/pdf-direct-from-OC/
+
+# ---------------------------------------------------------------- données de travail (local only)
+data/
+
+# ---------------------------------------------------------------- Python / Jupyter (au cas où)
+__pycache__/
+*.py[cod]
+.ipynb_checkpoints/
+.venv/
+venv/
+env/
+*.egg-info/
+
+# ---------------------------------------------------------------- éditeurs / OS (au cas où)
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# ---------------------------------------------------------------- divers (au cas où)
+*.log
+logs/

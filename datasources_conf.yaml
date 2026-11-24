@@ -1,0 +1,53 @@
+# datasource_conf.yaml — AskJack : description du corpus
+# Chargé par rag.load_config via config.yaml -> paths.datasources_file
+# description : lue par le routeur (get_intent) pour choisir les doc_types -> soigner le contenu
+# forcecontext : true/false(default)/if_filter 
+#  - si true, le doc_type est toujours inclus dans le contexte, même si pas retenu par le routeur
+#  - si if_filter, le doc_type est inclus dans le contexte uniquement si retenu par le routeur
+
+project_id_regex: "(?i)^p(\\d{1,2})_"   # P5_xxx / p05_xxx -> 5 ; None si pas de match
+
+sources:
+  - glob: "data/cv-perso/*.pdf"
+    doc_type: cv
+    label: "CV"
+    description: "CV : parcours professionnel complet (20 ans d'IT santé), expériences, formation, compétences générales"
+    forcecontext: if_filter_or_not_sure
+
+  - glob: "data/fiches-projets/*.docx"
+    doc_type: fiche
+    label: "Fiche projet (avec retour évaluateur)"
+    description: "Fiche par projet OC : mission, réalisation, stack, compétences acquises, livrables, retour de l'évaluateur"
+
+  - glob: "data/fiches-projets/oc_projects_recap.xlsx"
+    doc_type: projects_list
+    label: "Récapitulatif des projets"
+    description: "Tableau récapitulatif des 13 projets OC : réalisations, livrables, date de validation"
+    forcecontext: if_filter_or_not_sure
+
+  - glob: "data/les-prezs/*.pdf"
+    doc_type: prez
+    label: "Présentation de soutenance"
+    description: "Slides de soutenance : démarche, résultats, choix techniques, illustrés"
+
+  - glob: "data/readme-requirements-docs/*README.md"
+    doc_type: readme
+    label: "README"
+    description: "README de dépôt : installation, architecture, outils, API, utilisation"
+
+  - glob: "data/readme-requirements-docs/*requirements.txt"
+    doc_type: requirements
+    label: "Dépendances Python"
+    description: "Liste brute des packages Python utilisés par un projet"
+    no_split: true
+
+  - glob: "data/readme-requirements-docs/*.toml"
+    doc_type: config
+    label: "Fichier de config (toml)"
+    description: "Config de projet (pyproject) : packages et outils"
+    no_split: true
+
+  - glob: "data/readme-requirements-docs/*.pdf"
+    doc_type: project_doc
+    label: "Doc projet"
+    description: "Documentation technique complémentaire d'un projet"
