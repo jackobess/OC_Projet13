@@ -3,7 +3,7 @@
 app:
   mode: recrut            # recrut | candidat — surchargé par ASKJACK_MODE
   debug: false            # surchargé par ASKJACK_DEBUG
-  max_questions_per_session: 20
+  max_questions_per_session: 10
 
 retrieval:
   top_k: 15
@@ -14,7 +14,7 @@ chunking:
 
 models:
   embedding: "mistral-embed"
-  llm: "mistral-large-latest"
+  llm: "mistral-medium-latest"
   llm_alternatives: ["mistral-small-latest","mistral-medium-latest", "mistral-large-latest"]
   temperature: 0.2
   max_tokens: 4000
@@ -38,8 +38,9 @@ ui:
      ou sur mon parcours (professionnel et formation)?"
 #    description: "Posez vos questions sur les projets, la stack et les compétences de {first_name}."
     examples:
-      - "Quels projets impliquent du déploiement d'API ?"
+      - "Quels projets ont impliqué du déploiement d'API ?"
       - "Quelle stack MLOps {first_name} maîtrise-t-il ?"
+      - "A-t-il implementé des agents RAG ?"
   candidat:
     title: "AskJack — espace perso"
     subtitle: "Ton assistant candidature"
