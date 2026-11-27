@@ -14,7 +14,7 @@ chunking:
 
 models:
   embedding: "mistral-embed"
-  llm: "mistral-medium-latest"
+  llm: "mistral-large-latest"
   llm_alternatives: ["mistral-small-latest","mistral-medium-latest", "mistral-large-latest"]
   temperature: 0.2
   max_tokens: 4000
@@ -36,7 +36,7 @@ ui:
     title: "AskJack"
     subtitle: "Des questions sur ma formation OpenClassrooms **Data Scientist – Machine Learning** (13 projets)<br>
      ou sur mon parcours (professionnel et formation)?"
-    description: "Posez vos questions sur les projets, la stack et les compétences de {first_name}."
+#    description: "Posez vos questions sur les projets, la stack et les compétences de {first_name}."
     examples:
       - "Quels projets impliquent du déploiement d'API ?"
       - "Quelle stack MLOps {first_name} maîtrise-t-il ?"
